@@ -11,10 +11,10 @@ cursor = conn.cursor()
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     but1 = types.KeyboardButton("Advert")
     but2 = types.KeyboardButton("Design")
-    markup1.add(but1, but2)
+    markup.add(but1, but2)
     bot.send_message(message.chat.id, "Выбери юнит:", reply_markup=markup, parse_mode='html')
 
 
@@ -64,7 +64,6 @@ def get_random_word(user_id, topic_id, message):
     """, (topic_id, user_id,))
 
     words_with_weights = cursor.fetchall()
-    print(words_with_weights)
     if words_with_weights:
         words, usage_weights = zip(*words_with_weights)
         selected_word = random.choices(words, usage_weights)[0]
@@ -72,6 +71,9 @@ def get_random_word(user_id, topic_id, message):
         but1 = types.KeyboardButton("Знаю")
         but2 = types.KeyboardButton("Не знаю")
         markup.add(but1, but2)
+        markup1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        but3 = types.KeyboardButton("Назад")
+        markup.add(but3)
         bot.send_message(message.from_user.id, selected_word, reply_markup=markup, parse_mode='html')
         cursor.execute("UPDATE Users SET last_word = ? WHERE user_id = ? AND last_topic = ?",
                        (selected_word, user_id, topic_id))
@@ -127,6 +129,12 @@ def on_user_response(message):
                 bot.send_message(message.from_user.id, f"Произошла ошибка😢, обратитесь к @lrawd3", parse_mode='html')
     else:
         bot.send_message(message.from_user.id, f"Я твой рот ебал\nВозникла ошибка\nПропиши /start", parse_mode='html')
+
+
+@bot.message_handler(content_types=["text"])
+def back(message):
+    if message.text == 'Назад':
+        start(message)
 
 
 bot.polling(none_stop=True)
