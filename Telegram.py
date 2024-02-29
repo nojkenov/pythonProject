@@ -18,28 +18,14 @@ def handle_command(message):
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    but1 = types.KeyboardButton("Advert")
-    but2 = types.KeyboardButton("Business")
-    but3 = types.KeyboardButton("Design")
-    but4 = types.KeyboardButton("Education")
-    but5 = types.KeyboardButton("Personality")
-    but6 = types.KeyboardButton("Language")
-    but7 = types.KeyboardButton("Travel")
-    but8 = types.KeyboardButton("Work")
-    but9 = types.KeyboardButton("Crime")
-    but10 = types.KeyboardButton("Arts and media")
-    but11 = types.KeyboardButton("Trends")
-    but12 = types.KeyboardButton("Engineering")
-    markup.add(but1, but2, but3)
-    markup.add(but4, but5, but6)
-    markup.add(but7, but8, but9)
-    markup.add(but10, but11, but12)
+    but1 = types.KeyboardButton("a")
+    markup.add(but1)
+
     bot.send_message(message.chat.id, "Выбери юнит:", reply_markup=markup, parse_mode='html')
 
 
 @bot.message_handler(
-    func=lambda message: message.text in ['Advert', 'Business', 'Design', 'Education', 'Personality', 'Language',
-                                          'Travel', 'Work', 'Crime', 'Arts and media', 'Trends', 'Engineering'])
+    func=lambda message: message.text in ['a'])
 def choose_topic(message):
     user_id = message.from_user.id
     topic_name = message.text
@@ -96,18 +82,7 @@ def choose_mode(message):
 
 def switch_case(argument):
     switch_dict = {
-        'Advert': 1,
-        'Business': 2,
-        'Design': 3,
-        'Education': 4,
-        'Personality': 5,
-        'Language': 6,
-        'Travel': 7,
-        'Work': 8,
-        'Crime': 9,
-        'Arts and media': 10,
-        'Trends': 11,
-        'Engineering': 12
+        'a': 1
     }
 
     return switch_dict.get(argument, "Invalid case")
